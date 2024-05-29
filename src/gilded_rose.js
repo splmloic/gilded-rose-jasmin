@@ -1,5 +1,5 @@
 class Item {
-  constructor(name, sellIn, quality){
+  constructor(name, sellIn, quality) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
@@ -7,7 +7,7 @@ class Item {
 }
 
 class Shop {
-  constructor(items=[]){
+  constructor(items = []) {
     this.items = items;
   }
   updateQuality() {
@@ -57,6 +57,70 @@ class Shop {
       }
     }
 
+    return this.items;
+  }
+
+  updateQualityV2() {
+    this.items.map((item) => {
+      //Strategy sulfuras
+      if (item.name.includes("Sulfuras")) {
+        item = item;
+      }
+      //Strategy Backstage
+      if (item.name.includes("Backstage")) {
+        if (item.sellIn > 10) {
+          item.quality = item.quality + 1;
+          item.sellIn = item.sellIn - 1;
+        }
+        if (item.sellIn <= 10 && item.sellIn > 5) {
+          item.quality = item.quality + 2;
+          item.sellIn = item.sellIn - 1;
+        }
+        if (item.sellIn <= 5 && item.sellIn > 0) {
+          item.quality = item.quality + 3;
+          item.sellIn = item.sellIn - 1;
+        }
+        if (item.sellIn <= 0) {
+          item.quality = 0;
+          item.sellIn = item.sellIn - 1;
+        }
+      }
+      //Strategy Conjured
+      if (item.name.includes("Conjured")) {
+        if (item.sellIn > 0 && item.quality >= 2) {
+          item.quality = item.quality - 2;
+          item.sellIn = item.sellIn - 1;
+        }
+        if (item.sellIn <= 0 && item.quality >= 2) {
+          item.quality = item.quality - 4;
+        }
+      }
+      //Strategy Aged Brie
+      if (item.name.includes("Aged Brie")) {
+        if (item.sellIn > 0 && item.quality < 50) {
+          item.sellIn = item.sellIn - 1;
+          item.quality = item.quality + 1;
+        }
+        if (item.sellIn > 0 && item.quality == 50) {
+          item.sellIn = item.sellIn - 1;
+        }
+        if (item.sellIn <= 0) {
+          item.quality = 0;
+          item.sellIn = item.sellIn - 1;
+        }
+      }
+      //Strategy Classic
+      if (!item.name.includes("Sulfuras") && !item.name.includes("Conjured") && !item.name.includes("Backstage passes") && !item.name.includes("Aged Brie")) {
+        if (item.sellIn > 0) {
+          item.quality = item.quality - 1;
+          item.sellIn = item.sellIn - 1;
+        }
+        if (item.sellIn <= 0) {
+          item.quality = item.quality - 2;
+          item.sellIn = item.sellIn - 1;
+        }
+      }
+    });
     return this.items;
   }
 }
