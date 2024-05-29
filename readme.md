@@ -1,6 +1,6 @@
-#Project de Refacto + test avec jasmin
+# Project de Refacto + test avec jasmin
 
 pour faire le test
-    -npx jasmin
+    - npx jasmin
 
 pour le refacto aller voir gilded_rose.js
