@@ -61,6 +61,9 @@ class Shop {
   }
 
   updateQualityV2() {
+    
+    let BackstageExpired = false;
+
     this.items.map((item) => {
       //Strategy sulfuras
       if (item.name.includes("Sulfuras")) {
@@ -68,8 +71,10 @@ class Shop {
       }
       //Strategy Backstage
       if (item.name.includes("Backstage")) {
-        if (item.sellIn > 10) {
-          item.quality = item.quality + 1;
+        if (item.sellIn <= 0) {
+          //effect on the Aged Brie
+          BackstageExpired = true;
+          item.quality = 0;
           item.sellIn = item.sellIn - 1;
         }
         if (item.sellIn <= 10 && item.sellIn > 5 && item.quality < 50) {
@@ -80,36 +85,41 @@ class Shop {
           item.quality = item.quality + 3;
           item.sellIn = item.sellIn - 1;
         }
-        if(item.quality >= 50){
-          item.quality = 50;
+        if (item.sellIn > 10) {
+          item.quality = item.quality + 1;
           item.sellIn = item.sellIn - 1;
         }
-        if (item.sellIn <= 0) {
-          item.quality = 0;
+        if(item.quality >= 50){
+          item.quality = 50;
           item.sellIn = item.sellIn - 1;
         }
       }
       //Strategy Conjured
       if (item.name.includes("Conjured")) {
+        if(item.sellIn > 0 && item.quality <=2){
+          item.quality = 0;
+          item.sellIn = item.sellIn - 1;
+        }
+        if(item.sellIn < 0 && item.quality <= 4){
+          item.quality = 0;
+          item.sellIn = item.sellIn - 1;
+        }
+        if (item.sellIn <= 0 && item.quality > 4) {
+          item.quality = item.quality - 4;
+          item.sellIn = item.sellIn - 1;
+        }
         if (item.sellIn > 0 && item.quality >= 2) {
           item.quality = item.quality - 2;
           item.sellIn = item.sellIn - 1;
         }
-        if (item.sellIn <= 0 && item.quality >= 2) {
-          item.quality = item.quality - 4;
-        }
       }
       //Strategy Aged Brie
       if (item.name.includes("Aged Brie")) {
-        if (item.sellIn > 0 && item.quality < 50) {
+        if (item.quality < 50) {
           item.sellIn = item.sellIn - 1;
           item.quality = item.quality + 1;
         }
-        if (item.sellIn > 0 && item.quality == 50) {
-          item.sellIn = item.sellIn - 1;
-        }
-        if (item.sellIn <= 0) {
-          item.quality = 0;
+        if (item.quality == 50) {
           item.sellIn = item.sellIn - 1;
         }
       }
@@ -123,6 +133,13 @@ class Shop {
           item.quality = item.quality - 2;
           item.sellIn = item.sellIn - 1;
         }
+      }
+      if(BackstageExpired){
+        this.items.map((item)=>{
+          if(item.name === "Aged Brie") {
+            item.quality = 0;
+          }
+        })
       }
     });
     return this.items;
