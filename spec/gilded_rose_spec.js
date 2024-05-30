@@ -53,9 +53,10 @@ describe("Gilded Rose", function() {
     });
 
     it("tester si un item de qualité 50 n'augmente pas", function() {
-        const shop = new Shop([new Item("Aged Brie", 2, 50)]);
+        const shop = new Shop([new Item("Aged Brie", 2, 50), new Item("Backstage passes to a TAFKAL80ETC concert", 3, 50)]);
         const items = shop.updateQualityV2();
         expect(items[0].quality).toBe(50);
+        expect(items[1].quality).toBe(50);
     });
 
     it("Tester si la qualité d'un Sulfuras reste la meme", function() {
@@ -80,6 +81,12 @@ describe("Gilded Rose", function() {
       const shop = new Shop([new Item("Elixir of the Mongoose", 0, 7)]);
       const items = shop.updateQualityV2();
       expect(items[0].quality).toBe(5);
+    });
+
+    it("Tester si  la qualité est diminué par 1", function() {
+      const shop = new Shop([new Item("Elixir of the Mongoose", 2, 7)]);
+      const items = shop.updateQualityV2();
+      expect(items[0].quality).toBe(6);
     });
 
     it("Tester si la qualité d'un item Conjured dessend 2 fois plus vite qu'un item normal", function() {
